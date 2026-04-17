@@ -79,4 +79,32 @@ final class Router
     {
         return $this->routes;
     }
+
+    public function registerFromConfig(array $routes): void
+    {
+        foreach ($routes as $route) {
+            $this->routes[] = $route;
+        }
+    }
+
+    public function registerFromYaml(string $path): void
+    {
+        if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
+            throw new \RuntimeException(
+                "YAML support requires symfony/yaml. Run: composer require symfony/yaml"
+            );
+        }
+
+        $config = \Symfony\Component\Yaml\Yaml::parseFile($path);
+
+        foreach ($config['routes'] as $route) {
+            $this->routes[] = [
+                strtoupper($route['method']),
+                $route['path'],
+                $route['controller'],
+                $route['action'],
+                $route['status'] ?? 200,
+            ];
+        }
+    }
 }
