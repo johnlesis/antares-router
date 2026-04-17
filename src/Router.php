@@ -107,4 +107,22 @@ final class Router
             ];
         }
     }
+
+    public function saveToCache(string $path): void
+    {
+        $directory = dirname($path);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        file_put_contents(
+            $path,
+            '<?php return ' . var_export($this->routes, true) . ';'
+        );
+    }
+
+    public function loadFromCache(string $path): void
+    {
+       $this->routes = require($path);
+    }
 }
