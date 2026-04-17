@@ -74,4 +74,9 @@ final class Router
             Dispatcher::METHOD_NOT_ALLOWED => throw new RuntimeException('Method not allowed', 405),
         };
     }
+
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
 }
